@@ -1,0 +1,36 @@
+# validity.test
+
+package require tcltest
+namespace import ::tcltest::*
+
+# Source the function to be tested
+source ../src/onetimepass.tcl
+
+set key 12345678901234567890
+
+# onetimepass::valid_hotp tests
+test valid_hotp_0th_interval {} -body {
+	onetimepass::valid_hotp 755224 $key -1	} -result 0
+
+test valid_hotp_111th_interval {} -body {
+	set token [onetimepass::get_hotp $key 111]		onetimepass::valid_hotp $token $key	-1
+} -result 111
+
+test valid_hotp_invalid {} -body {
+	set token [onetimepass::get_hotp $key 1000]
+	onetimepass::valid_hotp $token $key -1 100
+} -result -1
+
+# onetimepass::valid_totp tests
+test valid_totp_true {} -body {
+	set token [onetimepass::get_totp $key]
+	onetimepass::valid_totp $token $key
+} -result 1
+
+test valid_totp_false {} -body {
+	set token [onetimepass::get_totp $key]
+	append token "ERROR"
+	onetimepass::valid_totp $token $key
+} -result 0
+
+cleanupTests

@@ -1,0 +1,87 @@
+# get_totp.test
+
+package require tcltest
+namespace import ::tcltest::*
+
+# Source the function to be tested
+source ../src/onetimepass.tcl
+
+# All test vectors from RFC 6238: Appendix B
+#
+# In order to use these vectors, the very short
+# get_totp function has been replicated in full
+# in each of the test cases, i.e., manual calls to
+# get_hotp (from which get_totp is derived) are used
+#
+# This is necessary b/c the test vectors occur at
+# times in the past whereas get_totp uses the current
+# epoch time for token generation
+
+# Setup
+set sha1_key 12345678901234567890
+set sha256_key 12345678901234567890123456789012
+set X 30
+set token_length 8
+
+# Tests
+test get_totp_vector0_sha1 {} -body {
+	set T 0x1
+	onetimepass::get_hotp $sha1_key $T sha1 $token_length
+} -result 94287082
+
+test get_totp_vector0_sha256 {} -body {
+	set T 0x1
+	onetimepass::get_hotp $sha256_key $T sha2 $token_length
+} -result 46119246
+
+test get_totp_vector1_sha1 {} -body {
+	set T 0x23523EC
+	onetimepass::get_hotp $sha1_key $T sha1 $token_length
+} -result 07081804
+
+test get_totp_vector1_sha256 {} -body {
+	set T 0x23523EC
+	onetimepass::get_hotp $sha256_key $T sha2 $token_length
+} -result 68084774
+
+test get_totp_vector2_sha1 {} -body {
+	set T 0x23523ED
+	onetimepass::get_hotp $sha1_key $T sha1 $token_length
+} -result 14050471
+
+test get_totp_vector2_sha256 {} -body {
+	set T 0x23523ED
+	onetimepass::get_hotp $sha256_key $T sha2 $token_length
+} -result 67062674
+
+test get_totp_vector3_sha1 {} -body {
+	set T 0x273EF07
+	onetimepass::get_hotp $sha1_key $T sha1 $token_length
+} -result 89005924
+
+test get_totp_vector3_sha256 {} -body {
+	set T 0x273EF07
+	onetimepass::get_hotp $sha256_key $T sha2 $token_length
+} -result 91819424
+
+test get_totp_vector4_sha1 {} -body {
+	set T 0x3F940AA
+	onetimepass::get_hotp $sha1_key $T sha1 $token_length
+} -result 69279037
+
+test get_totp_vector4_sha256 {} -body {
+	set T 0x3F940AA
+	onetimepass::get_hotp $sha256_key $T sha2 $token_length
+} -result 90698825
+
+test get_totp_vector5_sha1 {} -body {
+	set T 0x27BC86AA
+	onetimepass::get_hotp $sha1_key $T sha1 $token_length
+} -result 65353130
+
+test get_totp_vector5_sha256 {} -body {
+	set T 0x27BC86AA
+	onetimepass::get_hotp $sha256_key $T sha2 $token_length
+} -result 77737706
+
+cleanupTests

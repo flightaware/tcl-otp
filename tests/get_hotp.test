@@ -1,0 +1,52 @@
+# get_hotp.test
+
+package require tcltest
+namespace import ::tcltest::*
+
+# Source the function to be tested
+source ../src/onetimepass.tcl
+
+set key 12345678901234567890
+
+# All test vectors from RFC 4226: Appendix D
+test get_hotp_vector0 {} -body {
+	onetimepass::get_hotp $key 0
+} -result 755224
+
+test get_hotp_vector1 {} -body {
+	onetimepass::get_hotp $key 1
+} -result 287082
+
+test get_hotp_vector2 {} -body {
+	onetimepass::get_hotp $key 2
+} -result 359152
+
+test get_hotp_vector3 {} -body {
+	onetimepass::get_hotp $key 3
+} -result 969429
+
+test get_hotp_vector4 {} -body {
+	onetimepass::get_hotp $key 4
+} -result 338314
+
+test get_hotp_vector5 {} -body {
+	onetimepass::get_hotp $key 5
+} -result 254676
+
+test get_hotp_vector6 {} -body {
+	onetimepass::get_hotp $key 6
+} -result 287922
+
+test get_hotp_vector7 {} -body {
+	onetimepass::get_hotp $key 7
+} -result 162583
+
+test get_hotp_vector8 {} -body {
+	onetimepass::get_hotp $key 8
+} -result 399871
+
+test get_hotp_vector9 {} -body {
+	onetimepass::get_hotp $key 9
+} -result 520489
+
+cleanupTests
